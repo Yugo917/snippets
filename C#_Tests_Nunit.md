@@ -6,7 +6,7 @@ public class MyClassTest
 	// ----- Synchrone
 
 	[Test]
-	public async Task MyMethodToTest_UseCase_ShouldExpectedResult()
+	public async Task MyMethodToTest_UseCase_ShouldSucceed()
 	{
 		//Arrange
 		//Act
@@ -14,20 +14,20 @@ public class MyClassTest
 	}
 
 	[Test]
-	public void MyMethodToTest_UseCase_ShouldThrowException()
+	public void MyMethodToTest_TestCase_ShouldThrowException()
 	{
 		//Arrange
 		//Act
-		Act act = () =>
+		var action = () =>
 		{			
 		};
 		//Assert
-		act.Should().Throw<Exception>().Where(e=>e.Message == "The excpeted error");;
+		action.Should().Throw<Exception>().Where(e=>e.Message == "The excpeted error");;
 	}
 
 	[TestCase("value1")]
 	[TestCase("value2")]
-	public void MyMethodToTest_MultipleCases_ShouldExpectedResult(string variable)
+	public void MyMethodToTest_MultipleTestCases_ShouldSucceed(string variable)
 	{
 		//Arrange
 		//Act
@@ -45,7 +45,7 @@ public class MyClassTest
 	}
 
 	[TestCaseSource(nameof(GenerateDataTests))]
-	public void Test1(string value, int expectedResult)
+	public void MyMethodToTest_MultipleTestCases2_ShouldSucceed(string value, int expectedResult)
 	{
 		//Arrange
 		//Act
@@ -53,7 +53,7 @@ public class MyClassTest
 	}
 
 	[TestCase(Ignore = "ignore cause description")]	
-	public async Task MyMethodToTest_UseCase_ShouldExpectedResult()
+	public async Task MyMethodToTest_UseCase_ShouldSucceed()
 	{
 		//Arrange
 		//Act
@@ -73,7 +73,7 @@ public class MyClassTest
 	// ----- ASynchrone
 
 	[Test]
-	public async Task MyMethodAsyncToTest_UseCase_ShouldExpectedResult()
+	public async Task MyMethodAsyncToTest_UseCase_ShouldSucceed()
 	{
 		//Arrange
 		//Act
@@ -85,19 +85,18 @@ public class MyClassTest
 	{
 		//Arrange
 		//Act		
-		Func<Task> act = async () =>
+		var action = async () =>
 		{
 			var _ = await myApi.myMethod1();
 		};
-
 		//Assert
-		(await act.Should().ThrowAsync<Exception>())
+		(await action.Should().ThrowAsync<Exception>())
 			.Where(e => e.Message.Contains("The excpeted error"));
 	}
 	
 	
 	[Test]
-	public async Task MyAsyncWorkFlowToTest_UseCase_ShouldExpectedResult()
+	public async Task MyAsyncWorkFlowToTest_UseCase_ShouldSucceed()
 	{
 		//Arrange
 		var waitTimeout = TimeSpan.FromSeconds(5);
