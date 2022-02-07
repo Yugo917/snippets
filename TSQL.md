@@ -123,7 +123,3 @@ AND req.start_time <= DATEADD(mi, -1, GETDATE())
 --AND con.[client_net_address] = ''
 ORDER BY req.start_time
 ```
-
-## Work with xml
-
-- Todo
