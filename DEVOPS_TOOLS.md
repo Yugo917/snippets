@@ -1,2 +1,0 @@
-semantic-release (https://github.com/semantic-release/semantic-release) Fully automated version management and package publishing
-renovate (https://github.com/renovatebot/renovate) Automated dependency updates. Multi-platform and multi-language.
