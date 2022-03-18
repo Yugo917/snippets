@@ -44,4 +44,5 @@ A.CallTo(() => myTestProxyObject.myMethod1())
 
 //Assert the method execution			
 A.CallTo(() => myFake.myMethod1(A<Type1>._)).MustHaveHappenedOnceExactly();
+A.CallTo(() => myFake.myMethod1(A<Type1>.That.Matches(x => x.Id == "toto"))).MustHaveHappenedOnceExactly();
 ```

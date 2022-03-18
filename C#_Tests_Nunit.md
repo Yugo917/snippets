@@ -6,7 +6,7 @@ public class MyClassTest
 	// ----- Synchrone
 
 	[Test]
-	public async Task MyMethodToTest_UseCase_ShouldSucceed()
+	public void MyMethodToTest_UseCase_ShouldSucceed()
 	{
 		//Arrange
 		//Act
