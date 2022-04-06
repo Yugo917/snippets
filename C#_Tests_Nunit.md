@@ -22,7 +22,7 @@ public class MyClassTest
 		{			
 		};
 		//Assert
-		action.Should().Throw<Exception>().Where(e=>e.Message == "The excpeted error");;
+		action.Should().Throw<Exception>().Where(e=>e.Message == "The expected error");;
 	}
 
 	[TestCase("value1")]
@@ -91,7 +91,7 @@ public class MyClassTest
 		};
 		//Assert
 		(await action.Should().ThrowAsync<Exception>())
-			.Where(e => e.Message.Contains("The excpeted error"));
+			.Where(e => e.Message.Contains("The expected error"));
 	}
 	
 	

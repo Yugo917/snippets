@@ -1,4 +1,5 @@
 # Nunit	and FluentAssertion
+## Tests
 ```c#
 [Trait("Category", "Unit")]
 public class MyClassTest
@@ -11,6 +12,7 @@ public class MyClassTest
 		//Arrange
 		//Act
 		//Assert
+		throw new NotImplementedException();
 	}
 
 	[Fact]
@@ -22,7 +24,7 @@ public class MyClassTest
 		{			
 		};
 		//Assert
-		action.Should().Throw<Exception>().Where(e=>e.Message == "The excpeted error");
+		action.Should().Throw<Exception>().Where(e=>e.Message == "The expected error");
 	}
 
 	[Theory]
@@ -70,6 +72,7 @@ public class MyClassTest
 		//Arrange
 		//Act
 		//Assert
+		throw new NotImplementedException();
 	}
 	
 	[Fact]
@@ -83,7 +86,24 @@ public class MyClassTest
 		};
 		//Assert
 		(await action.Should().ThrowAsync<Exception>())
-			.Where(e => e.Message.Contains("The excpeted error"));
+			.Where(e => e.Message.Contains("The expected error"));
+	}
+
+	[Fact]
+	public async Task MyMethodAsyncToTest_UseCase_ShouldThrowHttpException()
+	{
+		//Arrange
+		//Act		
+		var action = async () =>
+		{
+			var _ = await myApi.myMethod1();
+		};
+		//Assert
+		(await action.Should().ThrowAsync<ApiException>()).Where(x => x.StatusCode == HttpStatusCode.BadRequest)
+                                                       .And.Content.Should()
+                                                       .Contain("the Date must not be a default value")
+                                                       .And.Contain("The Prop1 field is required.")
+                                                       .And.Contain("The Prop2 field is required.");
 	}
 	
 	
@@ -91,9 +111,9 @@ public class MyClassTest
 	public async Task MyAsyncWorkFlowToTest_UseCase_ShouldSucceed()
 	{
 		//Arrange
-		var waitTimeout = TimeSpan.FromSeconds(5);
+		var waitTimeout = TimeSpan.FromSeconds(1);
 		var mre = new ManualResetEvent(false);
-		var messageToSnipe
+		var messageToSnipe;
 		bus.subscribe((message)=>{
 			messageToSnipe = message;
 			mre.set()
@@ -103,5 +123,65 @@ public class MyClassTest
 		//Assert
 		mre.WaitOne(waitTimeout).Should().BeTrue();
 	}	
+
+	[Fact]
+	public async Task MyAsyncWorkFlowToTest2_UseCase_ShouldSucceed()
+	{
+		//Arrange
+		var waitTimeout = TimeSpan.FromSeconds(1);
+		var countEvent = new CountdownEvent(2);
+		bus.subscribe((message)=>{
+			mre.Signal();
+		});
+		//Act
+		bus.sendMessage("MyMessage1");
+		bus.sendMessage("MyMessage2");
+		//Assert
+		countEvent.Wait(WaitTimeout);
+        countEvent.IsSet.Should().BeTrue();
+	}
 }
 ```		 
+## Fixture
+```c#
+public class MyFixture
+{
+	public string MyProp1 { get; }
+
+	public MyFixture
+	{
+
+	}
+}
+
+[CollectionDefinition(nameof(MyFixtureTestCollection))]
+public class MyFixtureTestCollection : ICollectionFixture<MyFixture>
+{
+    // This class has no code, and is never created. Its purpose is simply
+    // to be the place to apply [CollectionDefinition] and all the
+    // ICollectionFixture<> interfaces.
+}
+
+[Trait("Category", "Unit")]
+[Collection(nameof(MyFixtureTestCollection))]
+public class MyClassTest
+{
+
+	private readonly MyFixture fixture;
+
+    public MyClassTest(MyFixture fixture)
+    {
+        this.fixture = fixture;
+    }
+
+
+	[Fact]
+	public void MyMethodToTest_UseCase_ShouldSucceed()
+	{
+		//Arrange
+		//Act
+		//Assert
+	}
+}
+
+```	
