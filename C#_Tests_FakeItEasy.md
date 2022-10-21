@@ -9,6 +9,12 @@ var myFake = A.Fake<IMyInterface>();
 A.CallTo(() => myFake.myMethod1(A<Type1>._))
 	.Returns(newReturn);
 
+// to lazy return value
+A.CallTo(() => myFake.myMethod1(A<Type1>._))
+	.Returns(newReturn1);
+A.CallTo(() => myFake.myMethod2(A<Type1>._))
+	.ReturnsLazily((T inputIsnewReturn1)=>{newReturn2CoputedWIthnewReturn1});
+
 // to throw exception			
 A.CallTo(() => myFake.myMethod1(A<Type1>._))			
 	.Throws(new Exception());
