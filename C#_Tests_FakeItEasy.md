@@ -9,6 +9,10 @@ var myFake = A.Fake<IMyInterface>();
 A.CallTo(() => myFake.myMethod1(A<Type1>._))
 	.Returns(newReturn);
 
+// to return async value
+A.CallTo(() => myFake.myMethod1Async(A<Type1>._))
+	.Returns(Task.FromResult(newReturn));
+
 // to lazy return value
 A.CallTo(() => myFake.myMethod1(A<Type1>._))
 	.Returns(newReturn1);
@@ -33,6 +37,12 @@ A.CallTo(() => myFake.myMethod1(A<Type1>.That.Matches(x => x.Id == "toto")))
 	{
 		ObjToSnipe = (Type1)input.Arguments[0];
 	});
+
+// to simulate incremental behavior
+A.CallTo(() => myFake.DoAction())
+		.Throws<ArgumentException>().NumberOfTimes(1)
+		.Then.Throws<TimeoutException>().NumberOfTimes(1)
+		.Then.Throws<SystemException>().NumberOfTimes(1);
 
 //Create a TestProxyObject
 var myTestProxyObject = A.Fake<MyType>(x =>
