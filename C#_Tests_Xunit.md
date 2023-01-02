@@ -9,21 +9,21 @@ public class MyClassTest
 	[Fact]
 	public void MyMethodToTest_UseCase_ShouldSucceed()
 	{
-		//Arrange
-		//Act
-		//Assert
+		// Arrange
+		// Act
+		// Assert
 		throw new NotImplementedException();
 	}
 
 	[Fact]
 	public void MyMethodToTest_TestCase_ShouldThrowException()
 	{
-		//Arrange
-		//Act
+		// Arrange
+		// Act
 		var action = () =>
 		{			
 		};
-		//Assert
+		// Assert
 		action.Should().Throw<Exception>().Where(e=>e.Message == "The expected error");
 	}
 
@@ -32,9 +32,9 @@ public class MyClassTest
 	[InlineData("value2")]
 	public void MyMethodToTest_MultipleTestCases_ShouldSucceed(string variable)
 	{
-		//Arrange
-		//Act
-		//Assert
+		// Arrange
+		// Act
+		// Assert
 	}
 
 	public static IEnumerable<object[]> GenerateDataTests()
@@ -51,17 +51,17 @@ public class MyClassTest
     [MemberData(nameof(GenerateDataTests))]
 	public void MyMethodToTest_MultipleTestCases2_ShouldSucceed(string value, int expectedResult)
 	{
-		//Arrange
-		//Act
-		//Assert
+		// Arrange
+		// Act
+		// Assert
 	}
 
 	[Fact(Skip = "ignore cause description")]
 	public async Task MyMethodToTest_UseCase_ShouldSucceed()
 	{
-		//Arrange
-		//Act
-		//Assert
+		// Arrange
+		// Act
+		// Assert
 	}
 
 	// ----- ASynchrone
@@ -69,22 +69,22 @@ public class MyClassTest
 	[Fact]
 	public async Task MyMethodAsyncToTest_UseCase_ShouldSucceed()
 	{
-		//Arrange
-		//Act
-		//Assert
+		// Arrange
+		// Act
+		// Assert
 		throw new NotImplementedException();
 	}
 	
 	[Fact]
 	public async Task MyMethodAsyncToTest_UseCase_ShouldThrowException()
 	{
-		//Arrange
-		//Act		
+		// Arrange
+		// Act		
 		var action = async () =>
 		{
 			var _ = await myApi.myMethod1();
 		};
-		//Assert
+		// Assert
 		(await action.Should().ThrowAsync<Exception>())
 			.Where(e => e.Message.Contains("The expected error"));
 	}
@@ -92,13 +92,13 @@ public class MyClassTest
 	[Fact]
 	public async Task MyMethodAsyncToTest_UseCase_ShouldThrowHttpException()
 	{
-		//Arrange
-		//Act		
+		// Arrange
+		// Act		
 		var action = async () =>
 		{
 			var _ = await myApi.myMethod1();
 		};
-		//Assert
+		// Assert
 		(await action.Should().ThrowAsync<ApiException>()).Where(x => x.StatusCode == HttpStatusCode.BadRequest)
                                                        .And.Content.Should()
                                                        .Contain("the Date must not be a default value")
@@ -110,7 +110,7 @@ public class MyClassTest
 	[Fact]
 	public async Task MyAsyncWorkFlowToTest_UseCase_ShouldSucceed()
 	{
-		//Arrange
+		// Arrange
 		var waitTimeout = TimeSpan.FromSeconds(1);
 		var mre = new ManualResetEvent(false);
 		var messageToSnipe;
@@ -118,27 +118,27 @@ public class MyClassTest
 			messageToSnipe = message;
 			mre.set()
 		});
-		//Act
+		// Act
 		bus.sendMessage("MyMessage");
-		//Assert
+		// Assert
 		mre.WaitOne(waitTimeout).Should().BeTrue();
 	}	
 
 	[Fact]
 	public async Task MyAsyncWorkFlowToTest2_UseCase_ShouldSucceed()
 	{
-		//Arrange
+		// Arrange
 		var waitTimeout = TimeSpan.FromSeconds(1);
 		var countEvent = new CountdownEvent(2);
 		bus.subscribe((message)=>{
-			mre.Signal();
+			countEvent.Signal();
 		});
-		//Act
+		// Act
 		bus.sendMessage("MyMessage1");
 		bus.sendMessage("MyMessage2");
-		//Assert
+		// Assert
 		countEvent.Wait(WaitTimeout);
-        countEvent.IsSet.Should().BeTrue();
+        countEvent.CurrentCount.Should().Be(0);
 	}
 }
 ```		 
@@ -178,10 +178,22 @@ public class MyClassTest
 	[Fact]
 	public void MyMethodToTest_UseCase_ShouldSucceed()
 	{
-		//Arrange
-		//Act
-		//Assert
+		// Arrange
+		// Act
+		// Assert
 	}
 }
 
 ```	
+## Keep tests independent
+```c#
+var stringKey = Guid.NewGuid().ToString();
+var intKey = Random.Shared.Next();
+```
+## Keep comparaison readable
+```c#
+// compare lists
+List1.SequenceEqual(List2);
+// compare objects
+ComplexObject1.Should().BeEquivalentTo(ComplexObject2);
+```
